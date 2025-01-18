@@ -43,6 +43,28 @@ void iterative_merge(vector<int> &v){
         }
     }
 }
+int partition(vector<int> &v, int start, int end){
+    if(start>=end){return end;}
+    int i = -1;
+    int pI = end;
+    for(int j = 0;j<pI;j++){
+        if(v[j]<v[pI]){
+            i++;
+            swap(v[i],v[j]);
+        }
+    }
+    i++;
+    swap(v[i],v[pI]);
+    return i;
+}
+void quick(vector<int> &v,int start, int end){
+    if(start<end){
+        int pI = partition(v,0,end);
+        quick(v,0,pI-1);
+        quick(v,pI+1,end);
+    }
+    return;
+}
 void printv(vector<int> &v){
     for(int i = 0;i<v.size();i++){
         cout << v[i] << " ";
@@ -51,7 +73,7 @@ void printv(vector<int> &v){
 }
 
 int main(){
-    vector<int> v = {1,5,2,41,19,13,13,7};
-    iterative_merge(v);
+    vector<int> v = {1,5,2,41,19,13,13,7,3};
+    quick(v,0,v.size()-1);
     printv(v);
 }
