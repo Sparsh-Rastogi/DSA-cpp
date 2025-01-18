@@ -36,6 +36,7 @@ void printv(vector<int> &v){
     }
     cout << endl;
 }
+
 int main(){
     vector<int> v = {3,6,3,8,2,4,0,9,7};
     insertion(v);
