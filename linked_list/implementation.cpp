@@ -30,6 +30,36 @@ class Linkedlist {
         newNode->next = this->head;
         this->head = newNode;
     }
+    void insertAt(int pos,int data){
+        if(pos==0){
+            this->insertAtHead(data);
+            return;
+        }
+        Node* temp = head;
+        pos--;
+        while(pos--){
+            if(temp->next==NULL){
+                cout << "Not a valid position" << endl;
+                return;
+            }
+            temp = temp->next;
+        }
+        Node *node = new Node(data);
+        node->next = temp->next;
+        temp->next = node;
+    }
+    void insertAtTail(int data){
+        if(head==NULL){
+            this->insertAtHead(data);
+            return;
+        }
+        Node* temp = head;
+        while(temp->next!=NULL){
+            temp = temp->next;
+        }
+        Node* node = new Node(data);
+        temp->next = node;
+    }
     void print() {
         Node *temp = head;
         if (head == NULL) {
@@ -40,6 +70,7 @@ class Linkedlist {
             cout << temp->data << " ";
             temp = temp->next;
         }
+        cout << endl;
     }
 };
 Linkedlist arrToLL(int arr[], int n){
@@ -53,8 +84,10 @@ int main() {
     Linkedlist list;
     int arr[] = {1,4,7,8,4,2,5};
     list = arrToLL(arr,sizeof(arr)/sizeof(int));
-    cout << "Elements of the list are: ";
     list.print();
-    cout << endl;
+    list.insertAt(2,29);
+    list.print();
+    list.insertAtTail(57);
+    list.print();
     return 0;
 }
