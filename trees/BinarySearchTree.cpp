@@ -38,6 +38,49 @@ void insert(Node* root, int val){
         }
     }
 }
+void search(Node* root, int val){
+    if(root==NULL){
+        cout << "element not found " << endl;
+        return;
+    }
+    if(root->data>val){
+        search(root->left,val);
+    }
+    else if(root->data<val){
+        search(root->right,val);
+    }
+    else{
+        cout << "Element Found!" << endl;
+    }
+}
+
+Node* deleteNode(Node* root, int val){
+    if(root==NULL){
+        cout << "element not found " << endl;
+        return NULL;
+    }
+    if(root->data>val){
+        root->left = deleteNode(root->left,val);
+    }
+    else if(root->data<val){
+        root->right = deleteNode(root->right,val);
+    }
+    else{
+        if(root->left ==NULL){
+            return root->right;
+        }
+        if(root->right == NULL){
+            return root->left;
+        }
+        Node* temp = root->right;
+        while(temp->left){
+            temp = temp->left;
+        }
+        root->data = temp->data;
+        root->right = deleteNode(root->right,temp->data);
+    }
+    return root;
+}
 void inOrder(Node* root){
     if(root==NULL){return;}
     inOrder(root->left);
@@ -51,5 +94,8 @@ int main(){
     insert(root,7);
     insert(root,21);
     insert(root,39);
+    inOrder(root);
+    cout << endl;
+    deleteNode(root,21);
     inOrder(root);
 }
