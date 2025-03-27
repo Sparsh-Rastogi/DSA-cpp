@@ -20,7 +20,7 @@ int main(){
     bool visited[n+1] = {0};
     int e1,e2;
     cout << "Enter edges: " << endl;
-    for(int i =1;i<n;i++){
+    for(int i =0;i<e;i++){
         cin >> e1 >> e2;
         adjList[e1].push_back(e2);
         adjList[e2].push_back(e1);
