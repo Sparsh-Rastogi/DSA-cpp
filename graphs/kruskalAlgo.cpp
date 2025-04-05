@@ -16,11 +16,11 @@ int find_set(int v,int* parent){
 void union_set(int a,int b, int*size, int* parent){
     if(find_set(a,parent)==find_set(b,parent)){return;}
     if(size[a]>size[b]){
-        parent[parent[b]] = find_set(a,parent);
+        parent[find_set(b,parent)] = find_set(a,parent);
         size[a]+=size[b];
     }
     else{
-        parent[parent[a]] = find_set(b,parent);
+        parent[find_set(a,parent)] = find_set(b,parent);
         size[b]+=size[a];
     }
 }
@@ -58,6 +58,7 @@ int main(){
         union_set(get<0>(e),get<1>(e),size,parent);
         //cout << "verifying " << find_set(get<0>(e),parent) << " " << find_set(get<1>(e),parent) << endl;
     }
+    cout<< "printing MST: " << endl;
     printEdgeList(MST);
     
     
