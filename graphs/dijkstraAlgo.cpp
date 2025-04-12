@@ -6,7 +6,6 @@ struct isGreater {
     }
 };
 int main(){
-    priority_queue<int> q;
     int n,e;
     cout << "Enter Number of Nodes: ";
     cin >> n;
@@ -43,7 +42,7 @@ int main(){
     }
     for(int i = 0;i<n+1;i++){
         if(dist[i]==1e9){
-            cout << "Infinite" << endl;
+            cout << "Infinite";
             continue;
         }
         cout << dist[i] << " ";
