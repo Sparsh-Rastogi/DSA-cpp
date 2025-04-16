@@ -18,6 +18,10 @@ int main(){
             dist[i]=1e9;
         }
     }
+    int parent[n+1];
+    for(int i = 0;i<n+1;i++){
+        parent[i] = i;
+    }
     vector<pair<int,int>> adjList[n+1];
     bool visited[n+1] = {0};
     vector<tuple<int,int,int>> edgeList;
@@ -36,6 +40,7 @@ int main(){
         for(auto u: adjList[get<1>(temp)]){
             if(get<0>(temp)+u.second<dist[u.first]){
                 dist[u.first] = get<0>(temp)+u.second;
+                parent[u.first] = get<1>(temp);
                 pQ.push({dist[u.first],u.first});
             }
         }
@@ -45,7 +50,13 @@ int main(){
             cout << "Infinite";
             continue;
         }
-        cout << dist[i] << " ";
+        cout << dist[i] << ": ";
+        int j = i;
+        while(j!=0){
+            cout << j << " -> ";
+            j = parent[j];
+        }
+        cout << endl;
     }
     cout << endl;
     
