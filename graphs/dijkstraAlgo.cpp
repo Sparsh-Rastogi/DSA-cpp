@@ -30,7 +30,7 @@ int main(){
     for(int i =0;i<e;i++){
         cin >> e1 >> e2 >> w;
         adjList[e1].push_back({e2,w});
-        adjList[e2].push_back({e1,w});
+        // adjList[e2].push_back({e1,w}); uncomment for undirected graph
     }
     priority_queue<pair<int,int>,vector<pair<int,int>>,isGreater> pQ;
     pQ.push({0,0});

@@ -25,7 +25,7 @@ int main(){
     for(int i =0;i<e;i++){
         cin >> e1 >> e2 >> w;
         edgeList.push_back({e1,e2,w});
-        edgeList.push_back({e2,e1,w});
+        // edgeList.push_back({e2,e1,w}); uncomment for undirected graph
     }
     for(int i = 0;i<n+1;i++){
         for(auto u: edgeList){
