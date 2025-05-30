@@ -2,6 +2,7 @@
 using namespace std;
 
 long long sqrRoot(long long a, int isFloor=1){
+    if(a==0){return a;}
     int l = 1;
     int h = a;
     int mid;
@@ -26,5 +27,5 @@ long long sqrRoot(long long a, int isFloor=1){
 }
 
 int main(){
-    cout << sqrRoot(255);
+    cout << sqrRoot(0);
 }
