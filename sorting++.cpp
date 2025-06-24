@@ -26,6 +26,7 @@ void merging(vector<int> &v, int start, int mid, int end){
     }
     return;
 }
+//end is last index of the array
 void recursive_merge(vector<int> &v, int start, int end){
     if(start<end){
         int mid = start + (end-start)/2;
