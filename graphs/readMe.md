@@ -20,3 +20,13 @@ Uses Union-Find, Starting with a forest of n-trees with single node and adding t
 ## Dijkstra
 Starts from the source and adds a single edge with minimum weight in the graph and updates the distance 
 Won't work on negative edges, Single Source
+
+
+## 4. Smart Moves
+
+## MultiSource 
+Simply assume a virtual node.. Node -1 that is connected to all your source and search starting from this node
+
+## 5. Other techniques/methods
+
+## Topological Sort
