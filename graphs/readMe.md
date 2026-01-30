@@ -19,8 +19,13 @@ Uses Union-Find, Starting with a forest of n-trees with single node and adding t
 
 ## Dijkstra
 Starts from the source and adds a single edge with minimum weight in the graph and updates the distance 
-Won't work on negative edges, Single Source
+Won't work on negative edges, is Single Source
 
+## Floydd Warshall
+
+
+## Other points
+Negative cycles aren't allowed for any of these algorithms because concept of shortest path doesn't exist in graph with negative cycles
 
 ## 4. Smart Moves
 
