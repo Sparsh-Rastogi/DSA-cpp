@@ -1,8 +1,33 @@
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 #define int long long
 using namespace std;
+using namespace __gnu_pbds;
+
+typedef tree<
+    pair<int,int>,
+    null_type,
+    less<pair<int,int>>,
+    rb_tree_tag,
+    tree_order_statistics_node_update
+> ordered_set;
+
+long long count_inversions(vector<int> &a) {
+    ordered_set os;
+    long long inv = 0;
+
+    for (int i = 0; i < (int)a.size(); i++) {
+        // count elements greater than a[i]
+        inv += os.size() - os.order_of_key({a[i], i});
+        os.insert({a[i], i});
+    }
+
+    return inv;
+}
 
 constexpr int MOD = 998244353;
+vector<int> factt;
 
 int qpow(int a, int x = MOD - 2) {
     // if MOD is prime
@@ -13,15 +38,10 @@ int qpow(int a, int x = MOD - 2) {
     return res;
 }
 
-vector<int> factt;
-
 int nCr(int n, int r){
-    int ans = factt[n];
-    ans %=MOD;
-    ans *= qpow(factt[r]);
-    ans %=MOD;
-    ans *= qpow(factt[n-r]);
-    ans %=MOD;
+    int ans = factt[n]; ans %=MOD;
+    ans *= qpow(factt[r]); ans %=MOD;
+    ans *= qpow(factt[n-r]); ans %=MOD;
     return ans;
 }
 
@@ -179,47 +199,6 @@ long long sqrRoot(long long a, int isFloor=1){
     }
     return h+(isFloor&&(h*h!=a)?0:1);
 }
-
-long long merging(vector<int> &v, int start, int mid, int end){
-    vector <int> temp;
-    int i = start; int j = mid+1;
-    long long count_inv = 0;
-    while(i<=mid && j<=end){
-        if(v[i]<=v[j]){
-            temp.push_back(v[i]);
-            i++;
-        }
-        else{
-            temp.push_back(v[j]);
-            count_inv += mid-i+1;
-            // cout << i << " " << j << " " << count_inv << endl;
-            j++;
-        }
-    }
-    while(i<=mid){
-            temp.push_back(v[i]);
-            i++;
-    }
-    while(j<=end){
-        temp.push_back(v[j]);
-        j++;
-    }
-    for(int i = start;i<=end;i++){
-        v[i] = temp[i-start];
-    }
-    return count_inv;
-}
-long long recursive_merge(vector<int> &v, int start, int end){
-    long long count_inv = 0;
-    if(start<end){
-        int mid = start + (end-start)/2;
-        count_inv += recursive_merge(v,start,mid);
-        count_inv+= recursive_merge(v,mid+1,end);
-
-        count_inv += merging(v,start,mid,end);
-    }
-    return count_inv;
-}
     
 vector<int> dijkstra(vector<vector<pair<int,int>>> &adjList){
     int n = adjList.size()-1;
@@ -246,6 +225,14 @@ vector<int> dijkstra(vector<vector<pair<int,int>>> &adjList){
 }
 
 //Lowest Common Ancestor
+int lift(int u, int d, vector<vector<int>> &up){
+    for(int i = 0;i<=32;i++){
+        if(d&(1<<i)){
+            u = up[u][i];
+        }
+    }
+    return u;
+}
 void lca_init(int v, int p,vector<int> &h, vector<vector<int>> &adj, vector<vector<int>> &up) {
     up[v][0] = p;
     for (int i = 1; i < 32; i++) {
@@ -280,6 +267,44 @@ int lca(int a, int b, vector<int> &depth, vector<vector<int>> &up) {
     return up[a][0];
 }
 
+void tarzan(
+    int u, int p,
+    vector<int>& tin,
+    vector<int>& low,
+    vector<bool>& isArt,
+    vector<pair<int,int>>& bridges,
+    int& timer,
+    vector<vector<int>> &adj
+) {
+    tin[u] = low[u] = ++timer;
+    int children = 0;
+
+    for (int v : adj[u]) {
+        if (v == p) continue;
+
+        if (tin[v]) {
+            low[u] = min(low[u], tin[v]);
+        }
+        else {
+            tarzan(v, u, tin, low, isArt, bridges, timer,adj);
+            low[u] = min(low[u], low[v]);
+
+            if (low[v] > tin[u]) {
+                bridges.push_back({u, v});
+            }
+
+            if (low[v] >= tin[u] && p != -1) {
+                isArt[u] = true;
+            }
+
+            children++;
+        }
+    }
+
+    if (p == -1 && children > 1) {
+        isArt[u] = true;
+    }
+}
 int scc_count(int n, vector<vector<int>> &adj) {
 
     vector<int> vis(n, 0);
@@ -326,6 +351,38 @@ int scc_count(int n, vector<vector<int>> &adj) {
     }
 
     return scc_count;
+}
+void euler(
+    int root,
+    vector<vector<int>>& adj,
+    vector<int>& tin,
+    vector<int>& tout,
+    vector<int>& flat
+)
+{
+    int n = adj.size();
+    tin.assign(n, 0);
+    tout.assign(n, 0);
+    flat.clear();
+
+    int timer = 0;
+
+    function<void(int,int)> dfs = [&](int u, int p)
+    {
+        tin[u] = timer;
+        flat.push_back(u);
+        timer++;
+
+        for(int v : adj[u])
+        {
+            if(v == p) continue;
+            dfs(v, u);
+        }
+
+        tout[u] = timer - 1;
+    };
+
+    dfs(root, -1);
 }
 
 //DSU

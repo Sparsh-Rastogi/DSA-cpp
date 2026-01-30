@@ -33,6 +33,11 @@ int numberOf1s(int n){
     }
     return count;
 }
+
+int lsb(int n){
+    return (n&(-n));
+}
+
 int main(){
     cout << getBit(21,3) << endl;
     cout << getBit(21,4) << endl;
