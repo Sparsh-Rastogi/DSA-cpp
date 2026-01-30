@@ -13,6 +13,11 @@ typedef tree<
     tree_order_statistics_node_update
 > ordered_set;
 
+//Custom Comparator
+// sort(v.begin(), v.end(), [](const vector<int>& a, const vector<int>& b) {
+//     return a[1] < b[1];
+// });
+
 long long count_inversions(vector<int> &a) {
     ordered_set os;
     long long inv = 0;
