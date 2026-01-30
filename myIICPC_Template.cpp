@@ -12,6 +12,7 @@ int qpow(int a, int x = MOD - 2) {
     for (; x; x >>= 1, a = 1ll * a * a % MOD) if (x & 1) res = 1ll * res * a % MOD;
     return res;
 }
+
 vector<int> factt;
 
 int nCr(int n, int r){
@@ -40,8 +41,13 @@ vector<int> spf(int n){
     return Lprime;
 }
 
-vector<int> sieve(int n){
-
+void sieve(int n, vector<vector<int>> &factors){
+    for(int i=2;i<=n;i++){
+        for(int j=i;j<=n;j+=i){
+            factors[j].push_back(i);
+        }
+    }
+    return;
 }
 
 struct SegTree {
@@ -239,6 +245,7 @@ vector<int> dijkstra(vector<vector<pair<int,int>>> &adjList){
     return dist;
 }
 
+//Lowest Common Ancestor
 void lca_init(int v, int p,vector<int> &h, vector<vector<int>> &adj, vector<vector<int>> &up) {
     up[v][0] = p;
     for (int i = 1; i < 32; i++) {
@@ -251,7 +258,6 @@ void lca_init(int v, int p,vector<int> &h, vector<vector<int>> &adj, vector<vect
         lca_init(to, v,h,adj,up);
     }
 }
-
 int lca(int a, int b, vector<int> &depth, vector<vector<int>> &up) {
     if (depth[a] < depth[b])
         swap(a, b);
@@ -272,6 +278,74 @@ int lca(int a, int b, vector<int> &depth, vector<vector<int>> &up) {
         }
     }
     return up[a][0];
+}
+
+int scc_count(int n, vector<vector<int>> &adj) {
+
+    vector<int> vis(n, 0);
+    vector<int> order;
+
+    // Step 1: DFS for finishing order
+    function<void(int)> dfs1 = [&](int u) {
+        vis[u] = 1;
+        for (int v : adj[u]) {
+            if (!vis[v]) dfs1(v);
+        }
+        order.push_back(u);
+    };
+
+    for (int i = 0; i < n; i++) {
+        if (!vis[i]) dfs1(i);
+    }
+
+    // Step 2: Transpose graph
+    vector<vector<int>> radj(n);
+    for (int u = 0; u < n; u++) {
+        for (int v : adj[u]) {
+            radj[v].push_back(u);
+        }
+    }
+
+    // Step 3: DFS on reversed graph in reverse finish order
+    vector<int> visited(n, 0);
+    int scc_count = 0;
+
+    function<void(int)> dfs2 = [&](int u) {
+        visited[u] = 1;
+        for (int v : radj[u]) {
+            if (!visited[v]) dfs2(v);
+        }
+    };
+
+    for (int i = n - 1; i >= 0; i--) {
+        int u = order[i];
+        if (!visited[u]) {
+            scc_count++;
+            dfs2(u);
+        }
+    }
+
+    return scc_count;
+}
+
+//DSU
+int find(int v, vector<int> &parent) {
+    if (parent[v] == v)
+        return v;
+    return parent[v] = find(parent[v], parent);
+}
+bool union_sets(int a, int b, vector<int> &parent, vector<int> &sz) {
+    a = find(a, parent);
+    b = find(b, parent);
+
+    if (a == b) return false;
+
+    if (sz[a] < sz[b])
+        swap(a, b);
+
+    parent[b] = a;
+    sz[a] += sz[b];
+    return true;
 }
 
 signed main(){    
